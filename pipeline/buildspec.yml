@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+    commands:
+      - find .
+      - env
+  build:
+    commands:
+      - echo Build started on `date`
+      - chmod +x terraform.sh
+      - ./terraform.sh
+      - echo Build ended on `date`
+artifacts:
+  files:
+    - tf.tar.gz
+ 
