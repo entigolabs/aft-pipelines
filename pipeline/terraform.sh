@@ -66,6 +66,11 @@ if [ "$COMMAND" == "plan" -o "$COMMAND" == "plan-destroy" ]
 then
   if [ ! -d plan ]
   then
+   if [[ $PROJECT_GIT == *"git-codecommit"* ]]; then
+     export GIT_SSH_COMMAND="$GIT_SSH_COMMAND -l $(echo $PROJECT_GIT | cut -d"@" -f1)"
+     export PROJECT_GIT=$(echo $PROJECT_GIT | cut -d"@" -f2-)
+     echo "Adding username to AWS codecommit repo in SSH command. $GIT_SSH_COMMAND"
+   fi
    git clone --single-branch --branch $BRANCH $PROJECT_GIT plan
     if [ ! -d plan ]
     then
