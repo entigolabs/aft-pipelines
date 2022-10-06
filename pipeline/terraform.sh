@@ -44,7 +44,7 @@ fi
 #pathed - each env uses folder named after itself 
 if [ "$PROJECT_TYPE" == "shared" ]
 then
-  export BRANCH="master"
+  export BRANCH="main"
   export TFPATH="${PROJECT_PATH}"
 elif [ "$PROJECT_TYPE" == "branched" ]
 then
@@ -52,7 +52,7 @@ then
   export TFPATH="${PROJECT_PATH}"
 elif [ "$PROJECT_TYPE" == "pathed" ]
 then
-  export BRANCH="master"
+  export BRANCH="main"
   export TFPATH="${PROJECT_PATH}/${ENVIRONMENT}"
 fi
 
