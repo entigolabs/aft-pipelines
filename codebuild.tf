@@ -169,7 +169,7 @@ resource "aws_codebuild_project" "build" {
     }
     environment_variable {
       name  = "TERRAFORM_VERSION"
-      value = local.tf_version[each.key]
+      value = var.terraform_version
     }
   }
 
