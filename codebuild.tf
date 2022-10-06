@@ -22,7 +22,6 @@ resource "aws_iam_role_policy_attachment" "build-admin" {
   for_each = {
     for key, value in toset(var.project_envs):
     key => upper(value)
-    if var.setup[key].assume_role == "self"
   }
   role       = aws_iam_role.build[each.key].name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
@@ -104,44 +103,6 @@ resource "aws_iam_role_policy_attachment" "build-codebuild" {
   policy_arn = aws_iam_policy.build_codebuild[each.key].arn
 }
 
-resource "aws_iam_policy" "build_assume" {
-  for_each = {
-    for key, value in toset(var.project_envs):
-    key => upper(value)
-    if var.setup[key].assume_role != "self"
-  }
-  name        = "${var.prefix}-${var.project_name}-${each.key}-assume"
-  description = "${var.prefix}-${var.project_name}-${each.key}-assume"
-
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": "sts:AssumeRole",
-            "Resource": [
-                "${var.setup[each.key].assume_role}"
-            ]
-        }
-    ]
-}
-EOF
-}
-
-
-resource "aws_iam_role_policy_attachment" "build-assume" {
-  for_each = {
-    for key, value in toset(var.project_envs):
-    key => upper(value)
-    if var.setup[key].assume_role != "self"
-  }
-  role       = aws_iam_role.build[each.key].name
-  policy_arn = aws_iam_policy.build_assume[each.key].arn
-}
-
-
 
 resource "aws_cloudwatch_log_group" "build" {
   name = "log-${var.prefix}-${var.project_name}"
@@ -204,7 +165,7 @@ resource "aws_codebuild_project" "build" {
     }
     environment_variable {
       name  = "ASSUMEROLE"
-      value = var.setup[each.key].assume_role
+      value = "self"
     }
     environment_variable {
       name  = "TERRAFORM_VERSION"

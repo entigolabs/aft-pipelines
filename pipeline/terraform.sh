@@ -9,7 +9,6 @@ set -x
 [ -z $PROJECT_PATH ] && echo "PROJECT_PATH must be set" && exit 1
 [ -z $PROJECT_TYPE ] && echo "PROJECT_TYPE must be set" && exit 1
 [ -z $COMMAND ] && echo "COMMAND must be set" && exit 1
-[ -z $ASSUMEROLE ] && echo "ASSUMEROLE must be set" && exit 1
 
 export TF_VERSION="${TERRAFORM_VERSION:=1.0.11}"
 export TF_IN_AUTOMATION=1
@@ -125,14 +124,6 @@ provider "aws" {
 
 EOF
 
-if [ "$ASSUMEROLE" != "self" ]
-then
-cat  <<EOF >> provider.tf
-  assume_role   {
-  	role_arn = "$ASSUMEROLE"
-  }
-EOF
-fi
 
 
 cat  <<EOF >> provider.tf
