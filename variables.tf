@@ -8,7 +8,7 @@ variable "project_name" {
 }
 
 variable "project_envs" {
-  type = list(string)
+  type = map(string)
 }
 
 variable "project_git" {

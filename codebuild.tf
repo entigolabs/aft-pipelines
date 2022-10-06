@@ -1,5 +1,5 @@
 resource "aws_iam_role" "build" {
-  for_each = toset(var.project_envs)
+  for_each = var.project_envs
   name = "${var.prefix}-${var.project_name}-${each.key}-build"
 
   assume_role_policy = <<EOF
@@ -20,7 +20,7 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "build-admin" {
   for_each = {
-    for key, value in toset(var.project_envs):
+    for key, value in var.project_envs:
     key => upper(value)
   }
   role       = aws_iam_role.build[each.key].name
@@ -29,7 +29,7 @@ resource "aws_iam_role_policy_attachment" "build-admin" {
 
 
 resource "aws_iam_policy" "build_codebuild" {
-  for_each = toset(var.project_envs)
+  for_each = var.project_envs
   name        = "${var.prefix}-${var.project_name}-${each.key}"
   description = "${var.prefix}-${var.project_name}-${each.key}"
 
@@ -98,7 +98,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "build-codebuild" {
-  for_each = toset(var.project_envs)
+  for_each = var.project_envs
   role       = aws_iam_role.build[each.key].name
   policy_arn = aws_iam_policy.build_codebuild[each.key].arn
 }
@@ -109,13 +109,13 @@ resource "aws_cloudwatch_log_group" "build" {
 }
 
 resource "aws_cloudwatch_log_stream" "build" {
-  for_each = toset(var.project_envs)
+  for_each = var.project_envs
   name           = "log-${var.prefix}-${var.project_name}-${each.key}"
   log_group_name = aws_cloudwatch_log_group.build.name
 }
 
 resource "aws_codebuild_project" "build" {
-  for_each = toset(var.project_envs)
+  for_each = var.project_envs
   name          = "${var.prefix}-${var.project_name}-${each.key}"
   description   = "${var.prefix}-${var.project_name}-${each.key}"
   build_timeout = "240"
@@ -137,7 +137,7 @@ resource "aws_codebuild_project" "build" {
     }
     environment_variable {
       name  = "REGION"
-      value = var.setup[each.key].region
+      value = each.value
     }
     environment_variable {
       name  = "PROJECT_NAME"
