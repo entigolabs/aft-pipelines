@@ -34,7 +34,6 @@ resource "aws_s3_bucket_public_access_block" "pipeline" {
 
 data "external" "pipeline" {
   program = ["${path.module}/pipeline/pipeline-zip.sh", path.root, "${var.prefix}-${var.project_name}-pipeline"]
-  depends_on = [local_file.public, local_file.private]
 }
 
 data "archive_file" "pipeline" {
