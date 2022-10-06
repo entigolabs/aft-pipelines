@@ -5,6 +5,9 @@ then
   mkdir "$1/$2"
 fi
 
+
+cp -r $3/pipeline/* $1/$2/
+
 if [ ! -f "$1/$2/sshkey" ]
 then
   cp -p "$1/sshkey" "$1/$2/sshkey" && cp -p "$1/sshkey.pub" "$1/$2/sshkey.pub"

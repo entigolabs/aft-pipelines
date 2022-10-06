@@ -33,7 +33,7 @@ resource "aws_s3_bucket_public_access_block" "pipeline" {
 }
 
 data "external" "pipeline" {
-  program = ["${path.module}/pipeline/pipeline-zip.sh", path.root, "${var.prefix}-${var.project_name}-pipeline"]
+  program = ["${path.module}/pipeline/pipeline-zip.sh", path.root, "${var.prefix}-${var.project_name}-pipeline", path.module]
 }
 
 data "archive_file" "pipeline" {
