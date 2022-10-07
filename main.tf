@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 resource "aws_dynamodb_table" "pipeline" {
   name         = "${var.prefix}-${var.project_name}-${var.project_account}"
   billing_mode = "PAY_PER_REQUEST"
