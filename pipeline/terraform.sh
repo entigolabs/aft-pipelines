@@ -9,6 +9,7 @@ set -x
 [ -z $PROJECT_PATH ] && echo "PROJECT_PATH must be set" && exit 1
 [ -z $PROJECT_TYPE ] && echo "PROJECT_TYPE must be set" && exit 1
 [ -z $COMMAND ] && echo "COMMAND must be set" && exit 1
+[ -z $ACCOUNT_ID ] && echo "ACCOUNT_ID must be set" && exit 1
 
 export TF_VERSION="${TERRAFORM_VERSION:=1.0.11}"
 export TF_IN_AUTOMATION=1
@@ -16,7 +17,7 @@ export GIT_SSH_COMMAND="ssh -i $(pwd)/sshkey -o UserKnownHostsFile=/dev/null -o 
 
 
 echo "Downloading the terraform version ${TF_VERSION} binary from S3."
-aws s3 cp s3://${PREFIX}-${PROJECT_NAME}/terraform_${TF_VERSION} /bin/terraform --no-progress
+aws s3 cp s3://${PREFIX}-${PROJECT_NAME}-${ACCOUNT_ID}/terraform_${TF_VERSION} /bin/terraform --no-progress
 if [ $? -ne 0 ]
 then
   echo "Failed to fetch TF binary from S3. Downloading from public mirror!"
@@ -25,7 +26,7 @@ then
   mv terraform /bin
   rm terraform_${TF_VERSION}_linux_amd64.zip
   echo "Copying terraform binary to S3 for future runs."
-  aws s3 cp /bin/terraform s3://${PREFIX}-${PROJECT_NAME}/terraform_${TF_VERSION} --no-progress --quiet
+  aws s3 cp /bin/terraform s3://${PREFIX}-${PROJECT_NAME}-${ACCOUNT_ID}/terraform_${TF_VERSION} --no-progress --quiet
 fi
 chmod +x /bin/terraform
 
@@ -105,9 +106,9 @@ then
 cat  <<EOF > backend.tf
 terraform {
   backend "s3" {
-    bucket = "${PREFIX}-${PROJECT_NAME}"
+    bucket = "${PREFIX}-${PROJECT_NAME}-${ACCOUNT_ID}"
     key    = "terraform.tfstate"
-    dynamodb_table = "${PREFIX}-${PROJECT_NAME}"
+    dynamodb_table = "${PREFIX}-${PROJECT_NAME}-${ACCOUNT_ID}"
     encrypt = true
   }
 }
