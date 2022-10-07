@@ -49,7 +49,7 @@ data "archive_file" "pipeline" {
   depends_on = [data.external.pipeline]
 }
 
-resource "aws_s3_bucket_object" "pipeline" {
+resource "aws_s3_object" "pipeline" {
   bucket = aws_s3_bucket.pipeline.id
   key    = "pipeline.zip"
   source = "${path.root}/${var.prefix}-${var.project_name}-pipeline.zip"
