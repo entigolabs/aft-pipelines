@@ -72,7 +72,7 @@ resource "aws_codepipeline" "codepipeline" {
       run_order = 1
       configuration = {
         S3Bucket = aws_s3_bucket.pipeline.id
-        S3ObjectKey = aws_s3_bucket_object.pipeline.id
+        S3ObjectKey = aws_s3_object.pipeline.id
         PollForSourceChanges = "false"
       }
     }
@@ -156,7 +156,7 @@ resource "aws_codepipeline" "destroy" {
       run_order = 1
       configuration = {
         S3Bucket = aws_s3_bucket.pipeline.id
-        S3ObjectKey = aws_s3_bucket_object.pipeline.id
+        S3ObjectKey = aws_s3_object.pipeline.id
         PollForSourceChanges = "false"
       }
     }

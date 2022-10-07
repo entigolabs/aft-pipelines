@@ -191,7 +191,7 @@ resource "aws_codebuild_project" "build" {
 
   source {
     type            = "S3"
-    location        = "${aws_s3_bucket.pipeline.id}/${aws_s3_bucket_object.pipeline.id}"
+    location        = "${aws_s3_bucket.pipeline.id}/${aws_s3_object.pipeline.id}"
   }
 
   tags = {
