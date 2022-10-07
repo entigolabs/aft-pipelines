@@ -173,7 +173,7 @@ resource "aws_codebuild_project" "build" {
     }
     environment_variable {
       name  = "ACCOUNT_ID"
-      value = data.aws_caller_identity.current.account_id
+      value = var.project_account
     }
   }
 

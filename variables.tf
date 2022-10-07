@@ -3,6 +3,10 @@ variable "prefix" {
   type = string
 }
 
+variable "project_account" {
+  type = string
+}
+
 variable "project_name" {
   type = string
 }

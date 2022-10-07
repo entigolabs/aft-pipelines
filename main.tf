@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_dynamodb_table" "pipeline" {
-  name         = "${var.prefix}-${var.project_name}-${data.aws_caller_identity.current.account_id}"
+  name         = "${var.prefix}-${var.project_name}-${var.project_account}"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
   attribute {
@@ -11,7 +11,7 @@ resource "aws_dynamodb_table" "pipeline" {
 }
 
 resource "aws_s3_bucket" "pipeline" {
-  bucket = "${var.prefix}-${var.project_name}-${data.aws_caller_identity.current.account_id}"
+  bucket = "${var.prefix}-${var.project_name}-${var.project_account}"
   force_destroy = true
 }
 
