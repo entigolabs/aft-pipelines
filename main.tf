@@ -12,10 +12,14 @@ resource "aws_dynamodb_table" "pipeline" {
 
 resource "aws_s3_bucket" "pipeline" {
   bucket = "${var.prefix}-${var.project_name}-${data.aws_caller_identity.current.account_id}"
-  versioning {
-    enabled = true
-  }
   force_destroy = true
+}
+
+resource "aws_s3_bucket_versioning"  "pipeline" {
+  bucket = aws_s3_bucket.pipeline.bucket
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "pipeline" {
