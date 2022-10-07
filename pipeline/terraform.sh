@@ -60,7 +60,7 @@ fi
 export TF_VAR_prefix=${PREFIX}
 export TF_VAR_region=${REGION}
 export TF_VAR_project_name=${PROJECT_NAME}
-
+export TF_VAR_project_account=${ACCOUNT_ID}
 
 
 if [ "$COMMAND" == "plan" -o "$COMMAND" == "plan-destroy" ]
