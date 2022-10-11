@@ -24,6 +24,22 @@ variable "project_path" {
   default = "/"
 }
 
+variable "project_vpc_id" {
+  type = string
+  default = ""
+}
+
+variable "project_vpc_subnet_id" {
+  type = list(string)
+  default = []
+}
+
+variable "project_vpc_security_group_ids" {
+  type = list(string)
+  default = []
+}
+
+
 variable "terraform_version" {
   type = string
   default = "1.3.1"
