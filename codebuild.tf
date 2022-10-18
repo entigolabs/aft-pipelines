@@ -115,11 +115,6 @@ resource "aws_cloudwatch_log_stream" "build" {
 }
 
 
-data "aws_ssm_parameters_by_path" "network_data" {
-  for_each = var.project_network_name == "" ? {} : var.project_envs
-  path = "/aft-pipelines/${var.project_network_name}-${each.key}"
-}
-
 data "aws_ssm_parameter" "vpc_id" {
   for_each = var.project_network_name == "" ? {} : var.project_envs
   name = "/aft-pipelines/${var.project_network_name}-${each.key}/vpc_id"
