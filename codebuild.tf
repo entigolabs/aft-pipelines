@@ -114,6 +114,16 @@ resource "aws_cloudwatch_log_stream" "build" {
   log_group_name = aws_cloudwatch_log_group.build.name
 }
 
+
+data "aws_ssm_parameters_by_path" "network_data" {
+  path = "/aft-pipelines/"
+}
+
+locals {
+  networks = { 
+     for i, v in data.aws_ssm_parameters_by_path.network_data.names : "${element(split("/", v), 2)}-${element(split("/", v), 3)}" => data.aws_ssm_parameters_by_path.network_data.values[i] }
+}
+
 resource "aws_codebuild_project" "build" {
   for_each = var.project_envs
   name          = "${var.prefix}-${var.project_name}-${each.key}"
@@ -127,11 +137,11 @@ resource "aws_codebuild_project" "build" {
   
   
   dynamic "vpc_config" {
-    for_each = var.project_vpc_id == "" ? {} : { vpc_id = var.project_vpc_id }
+    for_each = var.project_network_name == "" ? {} : { vpc_id = local.project_network_name }
     content {
-      vpc_id = var.project_vpc_id
-      subnets = var.project_vpc_subnet_id
-      security_group_ids = var.project_vpc_security_group_ids
+      vpc_id = local.networks["${var.project_network_name}-${each.key}-vpc_id"]
+      subnets = local.networks["${var.project_network_name}-${each.key}-private_subnets"]
+      security_group_ids = local.networks["${var.project_network_name}-${each.key}-pipeline_security_group"]
     }
   }
 

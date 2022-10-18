@@ -121,7 +121,7 @@ cat  <<EOF > provider.tf
 
 provider "aws" {
   region	= "$REGION"
-  max_retries	= 2
+  max_retries	= 5
 
 EOF
 
