@@ -122,12 +122,12 @@ data "aws_ssm_parameter" "vpc_id" {
 
 data "aws_ssm_parameter" "subnets" {
   for_each = var.project_network_name == "" ? {} : var.project_envs
-  name = "/aft-pipelines/${var.project_network_name}-${each.key}/subnets"
+  name = "/aft-pipelines/${var.project_network_name}-${each.key}/private_subnets"
 }
 
 data "aws_ssm_parameter" "security_group" {
   for_each = var.project_network_name == "" ? {} : var.project_envs
-  name = "/aft-pipelines/${var.project_network_name}-${each.key}/security_group"
+  name = "/aft-pipelines/${var.project_network_name}-${each.key}/pipeline_security_group"
 }
 
 
