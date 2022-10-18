@@ -46,3 +46,8 @@ variable "project_type" {
   #branched - each env uses branch named after itself
   #pathed - each env uses folder named after itself
 }
+
+variable "compute_type" {
+  type = string
+  default = "BUILD_GENERAL1_SMALL" 
+}
