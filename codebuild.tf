@@ -135,9 +135,9 @@ resource "aws_codebuild_project" "build" {
   dynamic "vpc_config" {
     for_each = var.project_network_name == "" ? {} : { "${each.key}" = "${each.value}" }
     content {
-      vpc_id = data.aws_ssm_parameters_by_path.network_data["/aft-pipelines/${var.project_network_name}-${each.key}/vpc_id"].value
-      subnets = split(",", data.aws_ssm_parameters_by_path.network_data["/aft-pipelines/${var.project_network_name}-${each.key}/private_subnets"].value)
-      security_group_ids = data.aws_ssm_parameters_by_path.network_data["/aft-pipelines/${var.project_network_name}-${each.key}/pipeline_security_group"].value
+      vpc_id = data.aws_ssm_parameters_by_path.network_data[each.key]["/aft-pipelines/${var.project_network_name}-${each.key}/vpc_id"].value
+      subnets = split(",", data.aws_ssm_parameters_by_path.network_data[each.key]["/aft-pipelines/${var.project_network_name}-${each.key}/private_subnets"].value)
+      security_group_ids = data.aws_ssm_parameters_by_path.network_data[each.key]["/aft-pipelines/${var.project_network_name}-${each.key}/pipeline_security_group"].value
     }
   }
 
