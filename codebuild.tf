@@ -153,7 +153,7 @@ resource "aws_codebuild_project" "build" {
     content {
       vpc_id = data.aws_ssm_parameter.vpc_id[each.key].value
       subnets = split(",", data.aws_ssm_parameter.private_subnets[each.key].value)
-      security_group_ids = data.aws_ssm_parameter.pipeline_security_group[each.key].value
+      security_group_ids = [data.aws_ssm_parameter.pipeline_security_group[each.key].value]
     }
   }
 
