@@ -187,6 +187,10 @@ resource "aws_codebuild_project" "build" {
       value = var.project_type
     }
     environment_variable {
+      name  = "PROJECT_NETWORK_NAME"
+      value = var.project_network_name
+    }
+    environment_variable {
       name  = "COMMAND"
       value = "plan"
     }
