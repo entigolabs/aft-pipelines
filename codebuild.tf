@@ -120,14 +120,14 @@ data "aws_ssm_parameter" "vpc_id" {
   name = "/aft-pipelines/${var.project_network_name}-${each.key}/vpc_id"
 }
 
-data "aws_ssm_parameter" "private_subnets" {
+data "aws_ssm_parameter" "subnets" {
   for_each = var.project_network_name == "" ? {} : var.project_envs
-  name = "/aft-pipelines/${var.project_network_name}-${each.key}/private_subnets"
+  name = "/aft-pipelines/${var.project_network_name}-${each.key}/subnets"
 }
 
-data "aws_ssm_parameter" "pipeline_security_group" {
+data "aws_ssm_parameter" "security_group" {
   for_each = var.project_network_name == "" ? {} : var.project_envs
-  name = "/aft-pipelines/${var.project_network_name}-${each.key}/pipeline_security_group"
+  name = "/aft-pipelines/${var.project_network_name}-${each.key}/security_group"
 }
 
 
@@ -147,8 +147,8 @@ resource "aws_codebuild_project" "build" {
     for_each = var.project_network_name == "" ? {} : { "${each.key}" = "${each.value}" }
     content {
       vpc_id = data.aws_ssm_parameter.vpc_id[each.key].value
-      subnets = split(",", data.aws_ssm_parameter.private_subnets[each.key].value)
-      security_group_ids = [data.aws_ssm_parameter.pipeline_security_group[each.key].value]
+      subnets = split(",", data.aws_ssm_parameter.subnets[each.key].value)
+      security_group_ids = [data.aws_ssm_parameter.security_group[each.key].value]
     }
   }
 
