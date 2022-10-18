@@ -137,7 +137,7 @@ resource "aws_codebuild_project" "build" {
   
   
   dynamic "vpc_config" {
-    for_each = var.project_network_name == "" ? {} : { vpc_id = local.project_network_name }
+    for_each = var.project_network_name == "" ? {} : { vpc_id = var.project_network_name }
     content {
       vpc_id = local.networks["${var.project_network_name}-${each.key}-vpc_id"]
       subnets = local.networks["${var.project_network_name}-${each.key}-private_subnets"]
