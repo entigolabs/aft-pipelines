@@ -120,11 +120,6 @@ data "aws_ssm_parameters_by_path" "network_data" {
   path = "/aft-pipelines/${var.project_network_name}-${each.key}"
 }
 
-output "paramsdebug" {
-  value = data.aws_ssm_parameters_by_path.network_data
-
-}
-
 resource "aws_codebuild_project" "build" {
   for_each = var.project_envs
   name          = "${var.prefix}-${var.project_name}-${each.key}"
@@ -137,14 +132,14 @@ resource "aws_codebuild_project" "build" {
   }
   
   
-#  dynamic "vpc_config" {
-#    for_each = var.project_network_name == "" ? {} : { each.key = each.key }
-#    content {
-#      vpc_id = aws_ssm_parameters_by_path.network_data[each.key]
-#      subnets = local.networks["${var.project_network_name}-${each.key}-private_subnets"]
-#      security_group_ids = local.networks["${var.project_network_name}-${each.key}-pipeline_security_group"]
-#    }
-#  }
+  dynamic "vpc_config" {
+    for_each = var.project_network_name == "" ? {} : { each.key = each.key }
+    content {
+      vpc_id = data.aws_ssm_parameters_by_path.network_data["/aft-pipelines/${var.project_network_name}-${each.key}/vpc_id"].value
+      subnets = split(",", data.aws_ssm_parameters_by_path.network_data["/aft-pipelines/${var.project_network_name}-${each.key}/private_subnets"].value)
+      security_group_ids = data.aws_ssm_parameters_by_path.network_data["/aft-pipelines/${var.project_network_name}-${each.key}/pipeline_security_group"].value
+    }
+  }
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
