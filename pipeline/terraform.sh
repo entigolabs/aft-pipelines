@@ -126,7 +126,7 @@ provider "aws" {
 
 EOF
 
-if [ "$PROJECT_DEFAULT_TAGS" != ""]
+if [ "$PROJECT_DEFAULT_TAGS" != "" ]
 then
 cat  <<EOF >> provider.tf
 
