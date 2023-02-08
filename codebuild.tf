@@ -191,6 +191,10 @@ resource "aws_codebuild_project" "build" {
       value = var.project_network_name
     }
     environment_variable {
+      name  = "PROJECT_DEFAULT_TAGS"
+      value = var.project_default_tags
+    }
+    environment_variable {
       name  = "COMMAND"
       value = "plan"
     }

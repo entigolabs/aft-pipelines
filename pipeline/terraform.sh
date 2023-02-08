@@ -126,6 +126,19 @@ provider "aws" {
 
 EOF
 
+if [ $PROJECT_DEFAULT_TAGS != ""]
+then
+cat  <<EOF >> provider.tf
+
+  default_tags {
+    tags = {
+      $PROJECT_DEFAULT_TAGS
+    }
+  }
+
+EOF
+
+fi
 
 
 cat  <<EOF >> provider.tf

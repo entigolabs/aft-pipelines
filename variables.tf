@@ -29,6 +29,11 @@ variable "project_network_name" {
   default = ""
 }
 
+variable "project_default_tags" {
+  type = string
+  default = ""
+}
+
 variable "terraform_version" {
   type = string
   default = "1.3.7"
