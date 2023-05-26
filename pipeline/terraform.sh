@@ -120,9 +120,18 @@ if [ ! -f provider.tf ]
 then
 cat  <<EOF > provider.tf
 
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~>4.9.0"
+    }
+  }
+}
+
 provider "aws" {
   region	= "$REGION"
-  max_retries	= 5
+  max_retries	= 10
 
 EOF
 
