@@ -144,7 +144,7 @@ resource "aws_codebuild_project" "build" {
   
   
   dynamic "vpc_config" {
-    for_each = var.project_network_name == "" ? {} : { "${each.key}" = "${each.value}" }
+    for_each = var.project_network_name == "" ? {} : { each.key = each.value }
     content {
       vpc_id = data.aws_ssm_parameter.vpc_id[each.key].value
       subnets = split(",", data.aws_ssm_parameter.subnets[each.key].value)
