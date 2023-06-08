@@ -60,6 +60,19 @@ resource "aws_s3_object" "pipeline" {
 
 
 
+output "s3_id" {
+  value = aws_s3_bucket.pipeline.id
+}
 
+output "codepipeline_ids" {
+  value = [
+    for bd in aws_codepipeline.codepipeline : bd.id
+  ]
+}
 
+output "codebuild_ids" {
+  value = [
+    for bd in aws_codebuild_project.build : bd.id
+  ]
+}
 

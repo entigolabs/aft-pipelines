@@ -1,3 +1,7 @@
+basic-test-pipeline.zip
+basic-test-pipeline
+terraform.tfstate
+terraform.tfstate.backup
 .terraform.lock.hcl
 .terraform/
 go.mod
